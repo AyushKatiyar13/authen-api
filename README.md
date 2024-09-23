@@ -1,5 +1,3 @@
-Here’s a detailed README file for your authentication and authorization API project:
-
 # Authentication & Authorization API
 
 Welcome to my Authentication and Authorization API repository! This project serves as a robust solution for user authentication, providing essential features for secure login and user management. Below, you'll find details about the technologies used, project structure, and how to get started.
