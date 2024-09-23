@@ -25,7 +25,7 @@ DATABASE_NAME = "authen_api"
 app = FastAPI()
 
 # Allow CORS for your frontend origin
-origins = ["http://127.0.0.1:5500"]  # Your frontend URL
+origins = ["https://authenapi.netlify.app/"]  # Your frontend URL
 
 app.add_middleware(
     CORSMiddleware,
@@ -115,7 +115,7 @@ async def verify_email(token: str):
 def send_verification_email(username: str, email: str):
     print(f"Preparing to send verification email to {email} for user {username}")
     verification_token = create_access_token(data={"sub": username}, expires_delta=timedelta(minutes=30))
-    verification_link = f"http://127.0.0.1:8000/verify-email?token={verification_token}"
+    verification_link = f"https://authenapi.netlify.app//verify-email?token={verification_token}"
     
     print(f"Generated verification link: {verification_link}")
 
@@ -169,7 +169,7 @@ async def request_password_reset(request: PasswordResetRequest):
         raise HTTPException(status_code=404, detail="User not found")
 
     access_token = create_access_token(data={"sub": user["username"]})
-    reset_link = f"http://127.0.0.1:8000/reset-password/{access_token}"
+    reset_link = f"https://authenapi.netlify.app//reset-password/{access_token}"
     return {"message": "Password reset link sent to your email."}
 
 class PasswordReset(BaseModel):
