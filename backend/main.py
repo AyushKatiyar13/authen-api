@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from backend.database import users_collection
+from .database import users_collection
 from .dependencies import oauth2_scheme
 
 # Hardcoded email configuration
