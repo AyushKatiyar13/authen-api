@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
             password: registerForm.password.value,
         };
 
-        const response = await fetch('http://127.0.0.1:8000/register', {
+        const response = await fetch('https://authen-api-j9n4.onrender.com/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
             password: loginForm.password.value,
         };
 
-        const response = await fetch('http://127.0.0.1:8000/login', {
+        const response = await fetch('https://authen-api-j9n4.onrender.com/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
