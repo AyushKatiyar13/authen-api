@@ -11,9 +11,10 @@ from fastapi.middleware.cors import CORSMiddleware
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from .database import users_collection
-from .dependencies import oauth2_scheme
+from database import users_collection
+from dependencies import oauth2_scheme
 
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # Hardcoded email configuration
 SENDER_EMAIL = "ayushkatiyar1301@gmail.com"
 SENDER_PASSWORD = "skiuasfqrcnxwiir"  # Ensure this is an app password or correct credentials
