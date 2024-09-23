@@ -1,3 +1,4 @@
+# Modified version with corrections
 import os
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -72,7 +73,7 @@ def verify_token(token: str) -> str:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload.get("sub")
     except JWTError:
-        return None
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid or expired token")
 
 # Routes
 @app.get("/")
@@ -94,8 +95,7 @@ async def register(user: RegisterUser):
     user_data["password"] = hashed_password
     await users_collection.insert_one(user_data)
     
-    print("Registering user and sending verification email...")
-    send_verification_email(user.username, user.email)  # Corrected line
+    send_verification_email(user.username, user.email)
     
     return {"message": "User registered successfully!"}
 
@@ -113,12 +113,9 @@ async def verify_email(token: str):
     return {"message": "Email verified successfully!"}
 
 def send_verification_email(username: str, email: str):
-    print(f"Preparing to send verification email to {email} for user {username}")
     verification_token = create_access_token(data={"sub": username}, expires_delta=timedelta(minutes=30))
-    verification_link = f"https://authenapi.netlify.app//verify-email?token={verification_token}"
+    verification_link = f"https://authenapi.netlify.app/verify-email?token={verification_token}"
     
-    print(f"Generated verification link: {verification_link}")
-
     msg = MIMEMultipart()
     msg['From'] = SENDER_EMAIL
     msg['To'] = email
@@ -133,9 +130,7 @@ def send_verification_email(username: str, email: str):
             server.send_message(msg)
         print("Email sent successfully!")
     except Exception as e:
-        print(f"Error sending email: {e}")  # This will help you identify any issues
-    send_verification_email("TestUser", "recipient_email@example.com")
-
+        print(f"Error sending email: {e}")
 
 @app.post("/login")
 async def login(user: LoginUser):
@@ -169,7 +164,7 @@ async def request_password_reset(request: PasswordResetRequest):
         raise HTTPException(status_code=404, detail="User not found")
 
     access_token = create_access_token(data={"sub": user["username"]})
-    reset_link = f"https://authenapi.netlify.app//reset-password/{access_token}"
+    reset_link = f"https://authenapi.netlify.app/reset-password/{access_token}"
     return {"message": "Password reset link sent to your email."}
 
 class PasswordReset(BaseModel):
